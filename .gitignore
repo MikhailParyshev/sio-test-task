@@ -1,6 +1,7 @@
 /.idea
 .env.*.local
 compose.override.yaml
+.phpactor.json
 
 ###> symfony/framework-bundle ###
 /.env.local
