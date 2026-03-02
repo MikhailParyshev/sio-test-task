@@ -1,34 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Repository;
 
 use App\Contract\Repository\CouponRepositoryInterface;
 use App\Entity\Coupon;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class CouponRepository implements CouponRepositoryInterface
+final class CouponRepository extends ServiceEntityRepository implements CouponRepositoryInterface
 {
-    public function findByCode(string $code): ?Coupon
+    public function __construct(ManagerRegistry $registry)
     {
-        foreach ($this->getCoupons() as $coupon) {
-            if ($coupon->getCode() === $code) {
-                return $coupon;
-            }
-        }
-
-        return null;
+        parent::__construct($registry, Coupon::class);
     }
 
-    private function getCoupons(): array
+    public function findByCode(string $code): ?Coupon
     {
-        return array_map(
-            function($item) {
-                return new Coupon(...$item);
-            },
-            [
-                ['P10', Coupon::TYPE_PERCENTAGE, 10],
-                ['P20', Coupon::TYPE_PERCENTAGE, 20],
-                ['F15', Coupon::TYPE_FIXED, 15],
-            ]
-        );
+        return $this->findOneBy(['code' => $code]);
     }
 }

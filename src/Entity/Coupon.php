@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -28,7 +28,6 @@ class Coupon {
         $this->value = $value;
     }
     
-    // геттеры
     public function getId(): ?int { return $this->id; }
     public function getCode(): string { return $this->code; }
     public function getType(): string { return $this->type; }

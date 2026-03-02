@@ -1,19 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Service\Discounter;
 
 use App\Contract\DiscounterInterface;
+use Brick\Money\Money;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
-class FixedDiscounter implements DiscounterInterface
+final class FixedDiscounter implements DiscounterInterface
 {
-    public function __construct(private readonly float $fixedDiscount) {}
+    public function __construct(private readonly Money $fixedDiscount) {}
 
-    public function apply(float $price): float
+    public function apply(Money $price): Money
     {
-        $discounted = $price - $this->fixedDiscount;
+        $discounted = $price->minus($this->fixedDiscount);
 
-        if ($discounted < 0) {
+        if ($discounted->isNegative()) {
             throw new UnprocessableEntityHttpException('Unprocessable discount');
         }
 

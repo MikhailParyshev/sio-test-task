@@ -1,18 +1,28 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Helper;
 
 use App\Entity\Coupon;
 use App\Factory\DiscounterFactory;
+use Brick\Math\RoundingMode;
+use Brick\Money\Currency;
+use Brick\Money\Money;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
-class PriceHelper
+final class PriceHelper
 {
+    public const DEFAULT_CURRENCY = 'EUR';
+
+    public static function createMoney(float $amount, Currency $currency): Money
+    {
+        return Money::ofMinor($amount * 100, $currency);
+    }
+
     public static function calculate(
-        float $price,
+        Money $price,
         int $taxPercentage,
         ?Coupon $coupon,
-    ): float
+    ): Money
     {
         if (isset($coupon)) {
             $discounter = DiscounterFactory::fromCoupon($coupon);
@@ -22,12 +32,14 @@ class PriceHelper
         return self::applyTax($price, $taxPercentage);
     }
 
-    private static function applyTax(float $price, int $taxPercentage): float
+    private static function applyTax(Money $price, int $taxPercentage): Money
     {
-        $taxAppliedPrice = $price * (100 - $taxPercentage) / 100;
-        if ($taxAppliedPrice < 0) {
+        $taxAppliedPrice = $price->multipliedBy((100 + $taxPercentage) / 100, RoundingMode::Down);
+
+        if ($taxAppliedPrice->isNegative()) {
             throw new UnprocessableEntityHttpException('Uprocessable price amount');
         }
+
         return $taxAppliedPrice;
     }
 }

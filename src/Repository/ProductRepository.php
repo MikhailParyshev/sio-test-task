@@ -1,45 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Repository;
 
 use App\Contract\Repository\ProductRepositoryInterface;
 use App\Entity\Product;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class ProductRepository implements ProductRepositoryInterface
+final class ProductRepository extends ServiceEntityRepository implements ProductRepositoryInterface
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Product::class);
+    }
+
     public function findById(int $id): ?Product
     {
-        foreach ($this->getProducts() as $product) {
-            if ($product->getId() === $id) {
-                return $product;
-            }
-        }
-
-        return null;
-    }
-
-    private function getProducts(): array
-    {
-        return array_map(
-            function($item) {
-                return $this->createProductWithId(...$item);
-            },
-            [
-                [1, 'Iphone', 100],
-                [2, 'Earphones', 20],
-                [3, 'Case', 10],
-            ]
-        );
-    }
-
-    private function createProductWithId(int $id, string $name, float $price): Product
-    {
-        $product = new Product($name, $price);
-
-        (new \ReflectionClass(Product::class))
-            ->getProperty('id')
-            ->setValue($product, $id);
-            
-        return $product;
+        return $this->find($id);
     }
 }

@@ -1,7 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Helper\PriceHelper;
+use Brick\Money\Money;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -15,23 +17,27 @@ class Product
     #[ORM\Column(length: 255)]
     private string $name;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private float $price;
+    #[ORM\Column(type: 'bigint')]
+    private int $priceAmount;
 
-    public function __construct(string $name, float $price)
+    #[ORM\Column(length: 3)]
+    private string $currencyCode = PriceHelper::DEFAULT_CURRENCY;
+
+    public function __construct(string $name, Money $price)
     {
         $this->name = $name;
-        $this->price = $price;
+        $this->setPriceMoney($price);
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function setName(string $name): static
@@ -40,15 +46,21 @@ class Product
         return $this;
     }
 
-    public function getPrice(): float
+    public function getName(): string
     {
-        return $this->price;
+        return $this->name;
     }
 
-    public function setPrice(float $price): static
+    public function setPriceMoney(Money $price): self
     {
-        $this->price = $price;
+        $this->priceAmount = $price->getMinorAmount()->toInt();
+        $this->currencyCode = $price->getCurrency()->getCurrencyCode();
         return $this;
+    }
+
+    public function getPriceMoney(): Money
+    {
+        return Money::ofMinor($this->priceAmount, $this->currencyCode);
     }
 }
 

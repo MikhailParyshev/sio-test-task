@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -13,6 +13,7 @@ use App\Enums\TaxCountry;
 use App\Factory\PaymentProcessorFactory;
 use App\Helper\PriceHelper;
 use App\Service\PurchaseService;
+use Brick\Money\Money;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -48,8 +49,9 @@ final class PurchaseController extends AbstractController
         CouponRepositoryInterface $couponRepository,
     ): JsonResponse
     {
+        $product = $this->getProduct($dto->product, $productRepository);
         $price = PriceHelper::calculate(
-            $this->getProduct($dto->product, $productRepository)->getPrice(),
+            $product->getPriceMoney(),
             $this->getTaxCountry($dto->taxNumber)->getTaxPercentage(),
             $this->getCoupon($dto->couponCode, $couponRepository),
         );

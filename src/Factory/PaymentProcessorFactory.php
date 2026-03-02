@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Factory;
 
@@ -8,7 +8,7 @@ use App\Service\Payment\StripePaymentProcessor;
 use Systemeio\TestForCandidates\PaymentProcessor\PaypalPaymentProcessor as AdaptedPaypalPaymentProcessor;
 use Systemeio\TestForCandidates\PaymentProcessor\StripePaymentProcessor as AdaptedStripePaymentProcessor;
 
-class PaymentProcessorFactory
+final class PaymentProcessorFactory
 {
     public static function create(string $paymentProcessor): ?PaymentProcessorInterface
     {

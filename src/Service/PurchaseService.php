@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Service;
 
@@ -8,7 +8,7 @@ use App\Entity\Product;
 use App\Enums\TaxCountry;
 use App\Helper\PriceHelper;
 
-class PurchaseService
+final class PurchaseService
 {
     public function process(
         Product $product,
@@ -17,8 +17,10 @@ class PurchaseService
         ?Coupon $coupon = null,
     ): void
     {
+        $price = $product->getPriceMoney();
+
         $price = PriceHelper::calculate(
-            $product->getPrice(),
+            $price,
             $taxCountry->getTaxPercentage(),
             $coupon,
         );
