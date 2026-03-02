@@ -16,7 +16,6 @@ final class Version20260302113900 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // Таблица product
         $this->addSql('
             CREATE TABLE product (
                 id SERIAL PRIMARY KEY,
@@ -26,7 +25,6 @@ final class Version20260302113900 extends AbstractMigration
             )
         ');
 
-        // Таблица coupon
         $this->addSql('
             CREATE TABLE coupon (
                 id SERIAL PRIMARY KEY,

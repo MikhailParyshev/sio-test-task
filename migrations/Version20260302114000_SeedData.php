@@ -16,13 +16,11 @@ final class Version20260302114000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // Products
         $this->addSql("INSERT INTO product (name, price_amount, currency_code) VALUES 
             ('iPhone', 10000, 'EUR'),
             ('Earphones', 2000, 'EUR'), 
             ('Case', 1000, 'EUR')");
 
-        // Coupons
         $this->addSql("INSERT INTO coupon (code, type, value) VALUES 
             ('P10', 'percentage', 10),
             ('P20', 'percentage', 20),
