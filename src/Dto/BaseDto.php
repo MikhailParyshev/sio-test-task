@@ -7,11 +7,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class BaseDto
 {
     #[Assert\Type('integer')]
+    #[Assert\NotBlank]
     #[Assert\Positive]
     public int $product;
     
-    #[Assert\NotBlank]
     #[Assert\Type('string')]
+    #[Assert\NotBlank]
     public string $taxNumber;
     
     #[Assert\Type('string')]

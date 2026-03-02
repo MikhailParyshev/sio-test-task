@@ -1,4 +1,63 @@
-### Calculate Price
+### [Calculate Price API]
+
+# success_coupon_fixed.json
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "GR123456789",
+  "couponCode": "F15"
+}
+
+###
+
+# 422_no_product.json  
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "taxNumber": "IT12345678901"
+}
+
+###
+
+# 422_no_product_and_tax_number.json
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{}
+
+###
+
+# 422_no_tax_number.json
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "couponCode": "P20"
+}
+
+###
+
+# success_no_coupon.json
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "FRkk123456789"
+}
+
+###
+
+# success_coupon_percent.json
 POST http://127.0.0.1:8337/calculate-price
 Accept: application/json
 Content-Type: application/json
@@ -6,10 +65,116 @@ Content-Type: application/json
 {
   "product": 1,
   "taxNumber": "DE123456789",
-  "couponCode": "D15"
+  "couponCode": "P20"
 }
 
-### Execute Purchase
+###
+
+# 400_invalid_json.json
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+    "pro
+}
+
+---
+
+### [Purchase API]
+
+# success_all_paypal.json
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 2,
+  "taxNumber": "IT12345678900",
+  "couponCode": "P10",
+  "paymentProcessor": "paypal"
+}
+
+###
+
+# 422_no_product.json
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "taxNumber": "IT12345678900",
+  "couponCode": "P10",
+  "paymentProcessor": "paypal"
+}
+
+###
+
+# 422_empty_body.json
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{}
+
+###
+
+# 422_invalid_tax_number.json
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "12345678900",
+  "couponCode": "P20",
+  "paymentProcessor": "stripe"
+}
+
+###
+
+# success_no_coupon.json
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 2,
+  "taxNumber": "IT12345678900",
+  "paymentProcessor": "paypal"
+}
+
+###
+
+# 422_payment_processor_not_found.json
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 2,
+  "taxNumber": "IT12345678900",
+  "couponCode": "P20",
+  "paymentProcessor": "kiwi"
+}
+
+###
+
+# 422_unsupported_coupon.json
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 2,
+  "taxNumber": "IT12345678900",
+  "couponCode": "R33",
+  "paymentProcessor": "stripe"
+}
+
+###
+
+# 422_no_payment_processor.json
 POST http://127.0.0.1:8337/purchase
 Accept: application/json
 Content-Type: application/json
@@ -17,6 +182,31 @@ Content-Type: application/json
 {
   "product": 1,
   "taxNumber": "IT12345678900",
-  "couponCode": "D15",
-  "paymentProcessor": "paypal"
+  "couponCode": "F15"
 }
+
+###
+
+# 422_product_not_found.json
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 9,
+  "taxNumber": "IT12345678900",
+  "couponCode": "P20",
+  "paymentProcessor": "stripe"
+}
+
+###
+
+# 400_invalid_json.json
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+    "pro
+}
+

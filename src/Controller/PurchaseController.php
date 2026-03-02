@@ -75,8 +75,12 @@ final class PurchaseController extends AbstractController
             ?? $this->throwUnprocessableException('Unsupported paymentProcessor');
     }
 
-    private function getCoupon(string $couponCode, CouponRepositoryInterface $couponRepository): Coupon
+    private function getCoupon(?string $couponCode = null, CouponRepositoryInterface $couponRepository): ?Coupon
     {
+        if (is_null($couponCode)) {
+            return null;
+        }
+
         return $couponRepository->findByCode($couponCode)
             ?? $this->throwUnprocessableException('Invalid couponCode');
     }

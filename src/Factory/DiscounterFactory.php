@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class DiscounterFactory
 {
-    public function create(Coupon $coupon): DiscounterInterface
+    public static function fromCoupon(Coupon $coupon): DiscounterInterface
     {
         return match ($coupon->getType()) {
             Coupon::TYPE_FIXED => new FixedDiscounter($coupon->getValue()),
